@@ -1,0 +1,37 @@
+{
+    "variables" : {
+        "region" : "us-east-1",
+        "source_ami" : "ami-009d6802948d06e52"
+    },
+    "builders" : [
+        {
+            "type" : "amazon-ebs",
+            "profile" : "default",
+            "region" : "{{user `region`}}",
+            "instance_type" : "t2.micro",
+            "source_ami" : "{{user `source_ami`}}",
+            "ssh_username" : "ec2-user",
+            "ami_name" : "test-packer-ami",
+            "ami_description" : "Amazon Linux Image",
+            "run_tags" : {
+                "Name" : "packer-builder-docker"
+            },
+            "tags" : {
+                "Tool" : "Packer",
+                "Author" : "lihtiandxc"
+            }
+        }
+    ],
+    "provisioners" : [
+        {
+            "type" : "file",
+            "source" : "COPY FILES",
+            "destination" : "COPY FILES"
+        },
+        {
+            "type" : "shell",
+            "script" : "./setup.sh",
+            "execute_command" : "sudo -E -S sh '{{ .Path }}'"
+        }
+    ]
+}
